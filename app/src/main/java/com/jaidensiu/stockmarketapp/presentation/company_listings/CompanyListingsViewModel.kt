@@ -57,9 +57,7 @@ class CompanyListingsViewModel @Inject constructor(
                                 state = state.copy(companies = listings)
                             }
                         }
-                        is Resource.Error -> {
-
-                        }
+                        is Resource.Error -> Unit
                         is Resource.Loading -> {
                             state = state.copy(isLoading = result.isLoading)
                         }

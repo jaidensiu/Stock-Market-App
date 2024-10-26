@@ -1,6 +1,5 @@
 package com.jaidensiu.stockmarketapp.data.repository
 
-import coil.network.HttpException
 import com.jaidensiu.stockmarketapp.data.csv.CSVParser
 import com.jaidensiu.stockmarketapp.data.local.StockDatabase
 import com.jaidensiu.stockmarketapp.data.mapper.toCompanyListing
@@ -12,6 +11,7 @@ import com.jaidensiu.stockmarketapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -57,7 +57,7 @@ class StockRepositoryImplementation @Inject constructor(
                     companyListingEntities = listings.map { it.toCompanyListingEntity() }
                 )
                 emit(Resource.Success(
-                    data = dao.searchCompanyListing("").map { it.toCompanyListing() }
+                    data = dao.searchCompanyListing(query = "").map { it.toCompanyListing() }
                 ))
                 emit(Resource.Loading(isLoading = false))
             }

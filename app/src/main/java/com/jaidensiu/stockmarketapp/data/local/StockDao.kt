@@ -1,10 +1,9 @@
-package com.jaidensiu.stockmarketapp.data.remote.dto
+package com.jaidensiu.stockmarketapp.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.jaidensiu.stockmarketapp.data.local.CompanyListingEntity
 
 @Dao
 interface StockDao {
