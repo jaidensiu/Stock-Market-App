@@ -11,7 +11,7 @@ fun CompanyListingEntity.toCompanyListing(): CompanyListing {
     )
 }
 
-fun CompanyListingEntity.toCompanyListingEntity(): CompanyListingEntity {
+fun CompanyListing.toCompanyListingEntity(): CompanyListingEntity {
     return CompanyListingEntity(
         name = name,
         symbol = symbol,
