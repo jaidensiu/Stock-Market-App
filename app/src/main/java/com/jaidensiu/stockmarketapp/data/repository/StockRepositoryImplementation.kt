@@ -1,11 +1,15 @@
 package com.jaidensiu.stockmarketapp.data.repository
 
 import com.jaidensiu.stockmarketapp.data.csv.CSVParser
+import com.jaidensiu.stockmarketapp.data.csv.IntradayInfoParser
 import com.jaidensiu.stockmarketapp.data.local.StockDatabase
+import com.jaidensiu.stockmarketapp.data.mapper.toCompanyInfo
 import com.jaidensiu.stockmarketapp.data.mapper.toCompanyListing
 import com.jaidensiu.stockmarketapp.data.mapper.toCompanyListingEntity
 import com.jaidensiu.stockmarketapp.data.remote.StockApi
+import com.jaidensiu.stockmarketapp.domain.model.CompanyInfo
 import com.jaidensiu.stockmarketapp.domain.model.CompanyListing
+import com.jaidensiu.stockmarketapp.domain.model.IntradayInfo
 import com.jaidensiu.stockmarketapp.domain.repository.StockRepository
 import com.jaidensiu.stockmarketapp.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -18,8 +22,9 @@ import javax.inject.Singleton
 @Singleton
 class StockRepositoryImplementation @Inject constructor(
     private val api: StockApi,
-    private val db: StockDatabase,
-    private val companyListingsParser: CSVParser<CompanyListing>
+    db: StockDatabase,
+    private val companyListingsParser: CSVParser<CompanyListing>,
+    private val intradayInfoParser: CSVParser<IntradayInfo>
 ): StockRepository {
     private val dao = db.dao
 
@@ -61,6 +66,33 @@ class StockRepositoryImplementation @Inject constructor(
                 ))
                 emit(Resource.Loading(isLoading = false))
             }
+        }
+    }
+
+    override suspend fun getIntradayInfo(symbol: String): Resource<List<IntradayInfo>> {
+        return try {
+            val response = api.getIntradayInfo(symbol = symbol)
+            val results = intradayInfoParser.parse(response.byteStream())
+            Resource.Success(results)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Resource.Error(message = "IOException caught.")
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            Resource.Error(message = "HttpException caught.")
+        }
+    }
+
+    override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
+        return try {
+            val result = api.getCompanyInfo(symbol = symbol)
+            Resource.Success(result.toCompanyInfo())
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Resource.Error(message = "IOException caught.")
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            Resource.Error(message = "HttpException caught.")
         }
     }
 }
