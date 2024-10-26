@@ -2,7 +2,6 @@ package com.jaidensiu.stockmarketapp.data.repository
 
 import coil.network.HttpException
 import com.jaidensiu.stockmarketapp.data.csv.CSVParser
-import com.jaidensiu.stockmarketapp.data.csv.CompanyListingsParser
 import com.jaidensiu.stockmarketapp.data.local.StockDatabase
 import com.jaidensiu.stockmarketapp.data.mapper.toCompanyListing
 import com.jaidensiu.stockmarketapp.data.mapper.toCompanyListingEntity
@@ -64,5 +63,4 @@ class StockRepositoryImplementation @Inject constructor(
             }
         }
     }
-
 }
